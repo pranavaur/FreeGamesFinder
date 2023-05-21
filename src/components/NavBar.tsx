@@ -55,7 +55,7 @@ const NavBar = () => {
             className="cursor-pointer mr-5"
           />
         </button>
-        <button className="mr-5 px-2 py-1 bg-primary hover:bg-hover">
+        <button className="mr-5 px-2 py-1 bg-violet-600 hover:bg-violet-800">
           Sign Up
         </button>
         <button className="m-0 px-2 py-1 bg-primary hover:bg-hover">
