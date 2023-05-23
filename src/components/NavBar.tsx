@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 const NavBar = () => {
   const [theme, setTheme] = useState("dark");
   const [searchTerm, setSearchTerm] = useState("");
+  const [toggleMenu, setToggleMenu] = useState(true);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -21,48 +22,99 @@ const NavBar = () => {
     setTheme(`${theme === "dark" ? "light" : "dark"}`);
   };
 
+  console.log(toggleMenu);
+
   return (
-    <nav className="w-full m-0 px-4 py-4 bg-light dark:bg-dark text-dark dark:text-light flex justify-between">
-      <div className="flex justify-between items-center">
-        <div className="flex md:hidden">
-          <AiOutlineMenu size={30} />
+    <>
+      <nav className="flex flex-col md:flex-row justify-between md:items-center py-4 px-5 dark:bg-dark">
+        <div className="hidden md:flex md:flex-row justify-between">
+          <button className="rounded-full bg-green-400 hover:bg-green-500 py-2 px-3 mr-5">
+            Browse by category
+          </button>
+          <button className="rounded-full bg-green-400 hover:bg-green-500 py-2 px-3">
+            Browse by platform
+          </button>
         </div>
-        <button className="mr-5 px-2 py-1 h-full hover:border-b-4 hover:border-hover">
-          Category
-        </button>
-        <button className="mr-5 px-2 py-1 h-full hover:border-b-4 hover:border-hover">
-          Platform
-        </button>
-      </div>
-      <div className="px-2 py-0.5 flex justify-start items-center rounded-full bg-gray-200 w-full md:w-[400px]">
-        <AiOutlineSearch size={25} className="dark:text-dark" />
-        <input
-          type="text"
-          className="min-w-[350px] p-2 focus:outline-none text-black bg-transparent"
-          placeholder="Search your favourite games..."
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </div>
-      <div className="flex justify-center">
-        <button onClick={handleThemeChange}>
-          <img
-            src={`${
-              theme === "dark" ? "/dark-theme-light.svg" : "/dark-theme.svg"
-            }`}
-            height={50}
-            width={35}
-            className="cursor-pointer mr-5"
+        <div className="hidden md:block">
+          <input
+            type="text"
+            placeholder="Search for your favourite games..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="md:min-w-[275px] rounded-full bg-black/10 dark:bg-light py-2 px-3 focus:outline-none"
           />
-        </button>
-        <button className="mr-5 px-2 py-1 bg-violet-600 hover:bg-violet-800">
-          Sign Up
-        </button>
-        <button className="m-0 px-2 py-1 bg-primary hover:bg-hover">
-          Login
-        </button>
-      </div>
-    </nav>
+        </div>
+        <div className="flex justify-between">
+          <div
+            className="md:hidden cursor-pointer"
+            onClick={() => setToggleMenu(!toggleMenu)}
+          >
+            <AiOutlineMenu size={30} className="text-dark dark:text-light" />
+          </div>
+          <div className="cursor-pointer" onClick={handleThemeChange}>
+            <img
+              src={`${
+                theme === "dark" ? "dark-theme-light.svg" : "dark-theme.svg"
+              }`}
+              width={30}
+              height={30}
+              alt="Tap to switch to dark or light theme"
+            />
+          </div>
+        </div>
+      </nav>
+      {/* Mobile Menu */}
+
+      {toggleMenu && (
+        <>
+          {/* Overlay */}
+          <div className="md:hidden bg-dark/80 dark:bg-light/60 absolute top-0 left-0 h-screen w-screen"></div>
+          {/* Sidebar Menu */}
+
+          <div className="md:hidden fixed top-0 left-0 h-screen w-screen sm:w-[50%] bg-light sm:bg-light dark:bg-dark duration-300">
+            <div className="flex justify-between items-center p-4">
+              <div className="cursor-pointer" onClick={handleThemeChange}>
+                <img
+                  src={`${
+                    theme === "dark" ? "dark-theme-light.svg" : "dark-theme.svg"
+                  }`}
+                  width={30}
+                  height={30}
+                  alt="Tap to switch to dark or light theme"
+                />
+              </div>
+              <AiOutlineClose
+                size={30}
+                className="text-dark dark:text-light cursor-pointer"
+                onClick={() => setToggleMenu(false)}
+              />
+            </div>
+
+            <div className="text-dark dark:text-light p-4">
+              <div className="flex flex-col gap-5">
+                <button className="rounded-full bg-green-400 hover:bg-green-500 py-2 px-3">
+                  Browse by Category
+                </button>
+                <button className="rounded-full bg-green-400 hover:bg-green-500 py-2 px-3">
+                  Browse by Platform
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="Search for your favourite games..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="w-full rounded-full bg-black/10 dark:bg-light py-2 px-3 mt-5 mb-5 focus:outline-none text-black"
+              />
+              <button className="rounded-full bg-blue-400 hover:bg-blue-500 py-2 px-3 w-full flex items-center justify-center">
+                <AiOutlineSearch size={20} />
+                <span className="ml-1">Search</span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
