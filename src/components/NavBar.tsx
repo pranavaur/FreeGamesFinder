@@ -63,16 +63,15 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-      {/* Mobile Menu */}
 
+      {/* Mobile Menu */}
       {toggleMenu && (
         <>
           {/* Overlay */}
           <div className="md:hidden bg-dark/80 dark:bg-light/60 absolute top-0 left-0 h-screen w-screen"></div>
           {/* Sidebar Menu */}
-
-          <div className="md:hidden fixed top-0 left-0 h-screen w-screen sm:w-[50%] bg-light sm:bg-light dark:bg-dark duration-300">
-            <div className="flex justify-between items-center p-4">
+          <div className="md:hidden fixed top-0 left-0 h-screen w-screen sm:w-[50%] bg-light sm:bg-light dark:bg-dark">
+            <div className="flex justify-between items-center p-4 transition-all duration-800">
               <div className="cursor-pointer" onClick={handleThemeChange}>
                 <img
                   src={`${
@@ -107,7 +106,7 @@ const NavBar = () => {
                 className="w-full rounded-full bg-black/10 dark:bg-light py-2 px-3 mt-5 mb-5 focus:outline-none text-black"
               />
               <button className="rounded-full bg-blue-400 hover:bg-blue-500 py-2 px-3 w-full flex items-center justify-center">
-                <AiOutlineSearch size={20} />
+                <AiOutlineSearch size={25} />
                 <span className="ml-1">Search</span>
               </button>
             </div>
