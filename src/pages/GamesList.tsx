@@ -1,47 +1,86 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import GamesCarousel from "../components/GamesCarousel";
 
-interface GamesData {
+export type Game = {
   id: number;
   title: string;
-}
+  genre: string;
+  developer: string;
+  thumbnail: string;
+  platform: string;
+  short_description: string;
+};
 
-interface Response {
-  data: GamesData;
-  status: number;
-}
+export type GroupedGames = {
+  [key: string]: Game[];
+};
 
 const GamesList = () => {
-  const [gamesData, setGamesData] = useState<GamesData[]>([]);
+  const [gamesData, setGamesData] = useState<Game[]>([]);
+  const [groupedGames, setGroupedGames] = useState<GroupedGames>({});
 
   useEffect(() => {
-    const getGamesData = async () => {
-      const data: Response = await axios.get(
+    const getGames = async () => {
+      const response = await fetch(
         "https://free-to-play-games-database.p.rapidapi.com/api/games",
         {
           headers: {
-            "X-RapidAPI-Key":
-              "2d81ad683amsh9c7dcc3e0bda830p1c1431jsn170be6b1c358",
-            "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+            "X-RapidAPI-Key": `${import.meta.env.VITE_RAPID_API_KEY}`,
+            "X-RapidAPI-Host": `${import.meta.env.VITE_RAPID_APP_HOST}`,
           },
         }
       );
-      console.log(data);
+      if (!response.ok) {
+        throw new Error("failed to fetch");
+      }
 
-      setGamesData(data.data);
+      const res = await response.json();
+      setGamesData(res);
     };
 
-    getGamesData();
+    getGames();
   }, []);
+
+  useEffect(() => {
+    /*
+      Example object: {
+        'Shooter': [{game1 obj}, {game2 obj}]
+      }
+    */
+
+    // const reducedGames = res.reduce(
+    //   (groupedGame: any, game) => ({
+    //     ...groupedGame,
+    //     [game.genre]: [...(groupedGame[game.genre] || []), game],
+    //   }),
+    //   {}
+    // );
+
+    const grouped = gamesData.reduce(function (
+      gamesObject: GroupedGames,
+      currentGame: Game
+    ) {
+      let currentGenre = currentGame.genre;
+      if (currentGenre in gamesObject) {
+        gamesObject[currentGenre] = [...gamesObject[currentGenre], currentGame];
+      } else {
+        gamesObject[currentGenre] = [currentGame];
+      }
+      return gamesObject;
+    },
+    {});
+
+    setGroupedGames(grouped);
+  }, [gamesData]);
+
+  // console.log(groupedGames);
 
   return (
     <div className="bg-white dark:bg-dark text-dark dark:text-white flex justify-center flex-grow">
       <ul>
-        {gamesData
-          .filter((g: GamesData) => g.id < 200)
-          .map((game: GamesData) => (
-            <li key={game.id}>{game.title}</li>
-          ))}
+        {Object.keys(groupedGames).map((genre) => {
+          return <GamesCarousel groupedGame={groupedGames[genre]} />;
+        })}
       </ul>
     </div>
   );

@@ -4,7 +4,7 @@ import { AiOutlineMenu, AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 const NavBar = () => {
   const [theme, setTheme] = useState("dark");
   const [searchTerm, setSearchTerm] = useState("");
-  const [toggleMenu, setToggleMenu] = useState(true);
+  const [showSideBar, setShowSideBar] = useState(false);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -22,12 +22,10 @@ const NavBar = () => {
     setTheme(`${theme === "dark" ? "light" : "dark"}`);
   };
 
-  console.log(toggleMenu);
-
   return (
     <>
-      <nav className="flex flex-col md:flex-row justify-between md:items-center py-4 px-5 dark:bg-dark">
-        <div className="hidden md:flex md:flex-row justify-between">
+      <nav className="flex flex-col lg:flex-row justify-between lg:items-center py-4 px-5 dark:bg-dark">
+        <div className="hidden lg:flex lg:flex-row justify-between">
           <button className="rounded-full bg-green-400 hover:bg-green-500 py-2 px-3 mr-5">
             Browse by category
           </button>
@@ -35,19 +33,19 @@ const NavBar = () => {
             Browse by platform
           </button>
         </div>
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <input
             type="text"
             placeholder="Search for your favourite games..."
             value={searchTerm}
             onChange={handleSearch}
-            className="md:min-w-[275px] rounded-full bg-black/10 dark:bg-light py-2 px-3 focus:outline-none"
+            className="lg:min-w-[300px] rounded-full bg-black/10 dark:bg-light py-2 px-3 focus:outline-none"
           />
         </div>
         <div className="flex justify-between">
           <div
-            className="md:hidden cursor-pointer"
-            onClick={() => setToggleMenu(!toggleMenu)}
+            className="lg:hidden cursor-pointer"
+            onClick={() => setShowSideBar(!showSideBar)}
           >
             <AiOutlineMenu size={30} className="text-dark dark:text-light" />
           </div>
@@ -65,13 +63,13 @@ const NavBar = () => {
       </nav>
 
       {/* Mobile Menu */}
-      {toggleMenu && (
+      {showSideBar && (
         <>
           {/* Overlay */}
-          <div className="md:hidden bg-dark/80 dark:bg-light/60 absolute top-0 left-0 h-screen w-screen"></div>
+          <div className="lg:hidden bg-dark/80 dark:bg-light/60 absolute top-0 left-0 h-screen w-screen"></div>
           {/* Sidebar Menu */}
-          <div className="md:hidden fixed top-0 left-0 h-screen w-screen sm:w-[50%] bg-light sm:bg-light dark:bg-dark">
-            <div className="flex justify-between items-center p-4 transition-all duration-800">
+          <div className="lg:hidden fixed top-0 left-0 h-screen w-screen sm:w-[50%] bg-light sm:bg-light dark:bg-dark transition-all duration-800">
+            <div className="flex justify-between items-center p-4">
               <div className="cursor-pointer" onClick={handleThemeChange}>
                 <img
                   src={`${
@@ -85,7 +83,7 @@ const NavBar = () => {
               <AiOutlineClose
                 size={30}
                 className="text-dark dark:text-light cursor-pointer"
-                onClick={() => setToggleMenu(false)}
+                onClick={() => setShowSideBar(false)}
               />
             </div>
 
